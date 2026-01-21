@@ -1,0 +1,7 @@
+{
+  "name": "LiveSync Pro - Sound Meter",
+  "description": "High-end sound pressure level (SPL) and RMS decibel meter with real-time visualization and analytics.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
