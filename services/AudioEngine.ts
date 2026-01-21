@@ -122,8 +122,8 @@ export class AudioEngine {
         const t = this.currentSettings.speed === 'FAST' ? 0.125 : 1.0;
         const alpha = 1 - Math.exp(-1 / ((this.audioContext.sampleRate / this.analyser.fftSize) * t));
 
-        // Casting explicit para evitar conflictos entre Float32Array<ArrayBufferLike> y Float32Array<ArrayBuffer>
-        this.analyser.getFloatTimeDomainData(this.dataArray as Float32Array);
+        // Uso de aserción 'unknown' para evitar error TS2345 de ArrayBufferLike en entornos estrictos
+        this.analyser.getFloatTimeDomainData(this.dataArray as unknown as Float32Array);
 
         let sumSquare = 0;
         let maxVal = 0;

@@ -22,8 +22,9 @@ const NumericalMonitor: React.FC<NumericalMonitorProps> = ({ rms, peak, maxRms, 
 
   useEffect(() => {
     const animate = (time: number) => {
-      if (lastTimeRef.current !== null) {
-        const deltaTime = (time - lastTimeRef.current) / 1000; 
+      const lastTime = lastTimeRef.current;
+      if (lastTime !== null) {
+        const deltaTime = (time - lastTime) / 1000; 
 
         setVisualRms(prev => {
           if (rms > prev) return rms;
