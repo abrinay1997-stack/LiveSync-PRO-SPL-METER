@@ -14,7 +14,7 @@ const NumericalMonitor: React.FC<NumericalMonitorProps> = ({ rms, peak, maxRms, 
   const [visualRms, setVisualRms] = useState(rms);
   const [visualPeak, setVisualPeak] = useState(peak);
   const requestRef = useRef<number>(null);
-  const lastTimeRef = useRef<number>(null);
+  const lastTimeRef = useRef<number | null>(null);
 
   // Live readout release ballistics (Smooth visual display)
   const RMS_RELEASE_RATE = 12; 
@@ -22,7 +22,7 @@ const NumericalMonitor: React.FC<NumericalMonitorProps> = ({ rms, peak, maxRms, 
 
   useEffect(() => {
     const animate = (time: number) => {
-      if (lastTimeRef.current !== undefined) {
+      if (lastTimeRef.current !== null) {
         const deltaTime = (time - lastTimeRef.current) / 1000; 
 
         setVisualRms(prev => {
@@ -41,7 +41,9 @@ const NumericalMonitor: React.FC<NumericalMonitorProps> = ({ rms, peak, maxRms, 
 
     requestRef.current = requestAnimationFrame(animate);
     return () => {
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
     };
   }, [rms, peak]);
 

@@ -24,7 +24,7 @@ export class AudioEngine {
   private leqAccumulator = 0;
   private leqCount = 0;
   
-  // Constante de compensación del sistema para alinear Web Audio con DAWs (corrección de -6dB detectada)
+  // Constante de compensación del sistema para alinear Web Audio con DAWs
   private readonly SYSTEM_GAIN_COMPENSATION = 6.0;
 
   private currentSettings = { 
@@ -33,8 +33,8 @@ export class AudioEngine {
     offset: 105,
     distance: 1,
     model: 'POINT' as PropagationModel,
-    digitalTrim: 0, // Compensación manual del usuario
-    aes17: false    // +3dB RMS compensation
+    digitalTrim: 0, 
+    aes17: false    
   };
 
   public updateSettings(settings: { 
@@ -114,9 +114,6 @@ export class AudioEngine {
       const update = () => {
         if (!this.analyser || !this.dataArray || !this.audioContext) return;
         
-        // Calculamos el factor de ganancia total: 
-        // 1. Compensación de sistema (+6dB base por defecto)
-        // 2. Trim manual del usuario (para ajuste fino)
         const totalGainDb = this.SYSTEM_GAIN_COMPENSATION + this.currentSettings.digitalTrim;
         const totalGainFactor = Math.pow(10, totalGainDb / 20);
         
@@ -125,7 +122,8 @@ export class AudioEngine {
         const t = this.currentSettings.speed === 'FAST' ? 0.125 : 1.0;
         const alpha = 1 - Math.exp(-1 / ((this.audioContext.sampleRate / this.analyser.fftSize) * t));
 
-        this.analyser.getFloatTimeDomainData(this.dataArray);
+        // Casting explicit para evitar conflictos entre Float32Array<ArrayBufferLike> y Float32Array<ArrayBuffer>
+        this.analyser.getFloatTimeDomainData(this.dataArray as Float32Array);
 
         let sumSquare = 0;
         let maxVal = 0;
