@@ -1,0 +1,23 @@
+
+export const ACOUSTIC_STANDARDS = {
+  THRESHOLDS: {
+    DANGER: 102,
+    WARNING: 95,
+    NORMAL: 85,
+  },
+  BALLISTICS: {
+    FAST_TIME: 0.125,
+    SLOW_TIME: 1.0,
+    RMS_RELEASE: 12,
+    PEAK_RELEASE: 6,
+  },
+  RANGE: {
+    MIN_SPL: 30,
+    MAX_SPL: 120,
+    MIN_TRIM: -20,
+    MAX_TRIM: 20,
+    MIN_OFFSET: 80,
+    MAX_OFFSET: 140,
+    SILENCE_THRESHOLD: -89.5,
+  }
+};
