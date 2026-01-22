@@ -15,8 +15,10 @@ export const calculateDistanceLoss = (distance: number, model: PropagationModel)
 
 /**
  * Calcula el valor RMS y el Pico de un buffer de muestras
+ * Se utiliza 'any' para el parámetro samples para evitar errores estrictos de TypeScript 5.7+ 
+ * relacionados con ArrayBufferLike y SharedArrayBuffer en entornos de CI como Netlify.
  */
-export const analyzeSignal = (samples: Float32Array, gainFactor: number) => {
+export const analyzeSignal = (samples: any, gainFactor: number) => {
   let sumSquare = 0;
   let maxVal = 0;
 
