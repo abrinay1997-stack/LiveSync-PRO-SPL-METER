@@ -9,7 +9,7 @@ export class AudioEngine {
   private microphone: MediaStreamAudioSourceNode | null = null;
   private stream: MediaStream | null = null;
   private weightingFilters: BiquadFilterNode[] = [];
-  private dataArray: Float32Array | null = null;
+  private dataArray: Float32Array<ArrayBuffer> | null = null;
   private animationId: number | null = null;
 
   private lastPower = 0;
