@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu } from 'lucide-react';
+import { Menu, Monitor, MessageSquareDot, LifeBuoy } from 'lucide-react';
 import Logo from './components/Logo';
 import Sidebar from './components/Sidebar';
 import ActionControlBar from './components/ActionControlBar';
@@ -106,6 +106,7 @@ const App: React.FC = () => {
       />
 
       <main className="flex-grow lg:ml-72 p-4 md:p-10 max-w-7xl mx-auto w-full pb-36 lg:pb-10 overflow-y-auto">
+        {/* Mobile Header */}
         <header className="flex items-center justify-between mb-8 lg:hidden">
           <Logo />
           <button 
@@ -115,6 +116,45 @@ const App: React.FC = () => {
             <Menu size={24} />
           </button>
         </header>
+
+        {/* Desktop Header Links (Minimal Version) */}
+        <div className="hidden lg:flex justify-end mb-8">
+          <div className="flex items-center gap-3 p-1.5 px-3 bg-white/[0.03] border border-white/5 rounded-2xl">
+            <a 
+              href="https://livesyncpro.com/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-slate-500 hover:text-cyan-400 transition-colors" 
+              title="Aplicación"
+            >
+              <Monitor size={16} />
+            </a>
+            
+            <div className="w-px h-3 bg-white/10" />
+            
+            <a 
+              href="https://support.livesyncpro.com/#chat" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-slate-500 hover:text-cyan-400 transition-colors" 
+              title="Chat Soporte"
+            >
+              <MessageSquareDot size={16} />
+            </a>
+            
+            <div className="w-px h-3 bg-white/10" />
+            
+            <a 
+              href="https://support.livesyncpro.com/#inicio" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-slate-500 hover:text-cyan-400 transition-colors" 
+              title="Base Conocimiento"
+            >
+              <LifeBuoy size={16} />
+            </a>
+          </div>
+        </div>
 
         {currentView === 'analyzer' ? (
           <AnalyzerView 

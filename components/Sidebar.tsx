@@ -5,6 +5,7 @@ import Logo from './Logo';
 import NavItem from './NavItem';
 import Button from './Button';
 import SegmentedControl from './SegmentedControl';
+import ShortcutsMenu from './ShortcutsMenu';
 import { WeightingMode } from '../types';
 
 interface SidebarProps {
@@ -26,9 +27,9 @@ const Sidebar: React.FC<SidebarProps> = ({
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden" onClick={() => setIsOpen(false)}></div>
       )}
       <aside className={`fixed inset-y-0 left-0 z-50 w-72 glass border-r border-white/5 transform transition-all duration-500 lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="p-8 flex flex-col h-full">
+        <div className="p-8 flex flex-col h-full overflow-y-auto custom-scrollbar">
           <Logo />
-          <nav className="mt-12 space-y-2 flex-grow">
+          <nav className="mt-12 space-y-2 flex-shrink-0">
             <NavItem 
               icon={<BarChart3 size={20} />} 
               label="Live Sound Engine" 
@@ -43,7 +44,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             />
           </nav>
 
-          <div className="bg-[#0f0f0f] p-5 rounded-2xl border border-white/5 space-y-6">
+          <div className="mt-8 bg-[#0f0f0f] p-5 rounded-2xl border border-white/5 space-y-6 flex-shrink-0">
             <SegmentedControl 
               label="Weighting Curve"
               value={weighting}
@@ -63,6 +64,8 @@ const Sidebar: React.FC<SidebarProps> = ({
               Reset Session
             </Button>
           </div>
+
+          <ShortcutsMenu />
         </div>
       </aside>
     </>
