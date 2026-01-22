@@ -4,14 +4,17 @@ import Button from './Button';
 import { AlertTriangle, RefreshCcw } from 'lucide-react';
 
 interface Props {
-  children: ReactNode;
+  // Fix: Making children optional helps resolve inference issues when the component is used in environments like index.tsx.
+  children?: ReactNode;
 }
 
 interface State {
   hasError: boolean;
 }
 
-class ErrorBoundary extends Component<Props, State> {
+// Fix: Explicitly using React.Component ensures that this.props and this.state are correctly recognized by the TypeScript compiler.
+class ErrorBoundary extends React.Component<Props, State> {
+  // Fix: Using class property initializer for state avoids issues with 'this' context typing in the constructor.
   public state: State = {
     hasError: false
   };
@@ -25,6 +28,9 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   public render() {
+    // Fix: Correctly access children from this.props which is now properly typed via inheritance.
+    const { children } = this.props;
+
     if (this.state.hasError) {
       return (
         <div className="min-h-screen bg-[#050505] flex items-center justify-center p-6 md:p-10">
@@ -60,7 +66,8 @@ class ErrorBoundary extends Component<Props, State> {
       );
     }
 
-    return this.props.children;
+    // Fix: Ensure a valid ReactNode is returned even if children is undefined.
+    return children || null;
   }
 }
 
