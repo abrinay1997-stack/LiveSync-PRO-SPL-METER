@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Settings, Play, Square, BarChart3, Menu, Activity, AlertTriangle, RotateCcw, SlidersHorizontal, Mic2, TrendingUp, Zap, Ruler, Speaker, Link2 } from 'lucide-react';
+import { Settings, Play, Square, BarChart3, Menu, Activity, AlertTriangle, RotateCcw, SlidersHorizontal, Mic2, TrendingUp, Zap, Ruler, Speaker, Link2, Plus, Minus } from 'lucide-react';
 import Logo from './components/Logo';
 import Card from './components/Card';
 import MeterDisplay from './components/MeterDisplay';
@@ -17,7 +17,6 @@ const App: React.FC = () => {
     rms: -60, peak: -60, spl: 0, sourceSpl: 0, leq: 0, distanceLoss: 0, clipped: false
   });
   
-  // Session Peaks State (Strict Peak Hold logic)
   const [globalSplPeak, setGlobalSplPeak] = useState(0);
   const [sessionMaxRms, setSessionMaxRms] = useState(-90);
   const [sessionMaxPeak, setSessionMaxPeak] = useState(-90);
@@ -50,8 +49,6 @@ const App: React.FC = () => {
           { weighting, speed, offset, distance, model, digitalTrim, aes17 },
           (data) => {
             setAudioData(data);
-            
-            // CRITICAL: Strict Peak Hold logic
             setGlobalSplPeak(prev => Math.max(prev, data.spl));
             setSessionMaxRms(prev => Math.max(prev, data.rms));
             setSessionMaxPeak(prev => Math.max(prev, data.peak));
@@ -88,7 +85,7 @@ const App: React.FC = () => {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden" onClick={() => setIsSidebarOpen(false)}></div>
       )}
 
-      {/* Navigation Sidebar */}
+      {/* Sidebar */}
       <aside className={`fixed inset-y-0 left-0 z-50 w-72 glass border-r border-white/5 transform transition-all duration-500 lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="p-8 flex flex-col h-full">
           <Logo />
@@ -102,26 +99,25 @@ const App: React.FC = () => {
               <label className="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-black block">Weighting Curve</label>
               <div className="grid grid-cols-3 gap-2">
                 {['Z', 'A', 'C'].map(m => (
-                  <button key={m} onClick={() => setWeighting(m as WeightingMode)} className={`text-xs py-2 rounded-lg border font-bold transition-all ${weighting === m ? 'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_10px_rgba(6,182,212,0.4)]' : 'border-white/10 text-slate-500 hover:bg-white/5'}`}>{m}</button>
+                  <button key={m} onClick={() => setWeighting(m as WeightingMode)} className={`text-xs py-3 rounded-lg border font-bold transition-all ${weighting === m ? 'bg-cyan-500 border-cyan-400 text-black shadow-[0_0_10px_rgba(6,182,212,0.4)]' : 'border-white/10 text-slate-500 hover:bg-white/5'}`}>{m}</button>
                 ))}
               </div>
             </div>
             
             <button 
               onClick={resetAllPeaks}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/10 transition-all"
+              className="w-full flex items-center justify-center gap-3 py-4 bg-white/5 border border-white/10 rounded-xl text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/10 transition-all active:scale-95"
             >
-              <RotateCcw size={14} /> Reset All Peaks
+              <RotateCcw size={16} /> Reset All Peaks
             </button>
           </div>
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <main className="flex-grow lg:ml-72 p-6 md:p-10 max-w-7xl mx-auto w-full pb-32 lg:pb-10">
+      <main className="flex-grow lg:ml-72 p-6 md:p-10 max-w-7xl mx-auto w-full pb-40 lg:pb-10">
         <header className="flex items-center justify-between mb-10 lg:hidden">
           <Logo />
-          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-3 bg-white/5 border border-white/10 rounded-xl text-cyan-400 transition-transform active:scale-90"><Menu size={24} /></button>
+          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-4 bg-white/5 border border-white/10 rounded-xl text-cyan-400 transition-transform active:scale-90"><Menu size={24} /></button>
         </header>
 
         {currentView === 'analyzer' && (
@@ -132,7 +128,7 @@ const App: React.FC = () => {
                   <div className="w-full flex justify-center scale-90 md:scale-100">
                     <MeterDisplay value={audioData.spl} label={`SPL (${weighting})`} unit="dB" />
                   </div>
-                  <div className="w-full max-w-xl px-4">
+                  <div className="w-full max-w-xl px-2">
                     <NumericalMonitor 
                       rms={audioData.rms} 
                       peak={audioData.peak} 
@@ -150,8 +146,8 @@ const App: React.FC = () => {
                       <div className="absolute top-4 right-4 flex flex-col items-end">
                          <div className="flex items-center gap-2 mb-1">
                             <span className="text-[9px] font-black text-cyan-500 uppercase tracking-widest opacity-60">Session Max</span>
-                            <button onClick={resetSourcePeak} className="p-1 hover:bg-cyan-500/20 rounded transition-colors text-cyan-500/50 hover:text-cyan-500">
-                               <RotateCcw size={12} />
+                            <button onClick={resetSourcePeak} className="p-3 hover:bg-cyan-500/20 rounded-xl transition-colors text-cyan-500/50 hover:text-cyan-500 active:scale-90">
+                               <RotateCcw size={18} />
                             </button>
                          </div>
                          <span className="text-3xl font-black text-white tabular-nums drop-shadow-[0_0_15px_rgba(6,182,212,0.4)]">
@@ -183,24 +179,27 @@ const App: React.FC = () => {
         {currentView === 'calibration' && (
           <div className="animate-fade-in max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
             <Card title="Digital Input Alignment" subtitle="Loopback Gain Correction" icon={<Link2 />}>
-              <div className="space-y-8 py-4">
-                <div className="text-center">
-                  <div className={`text-6xl font-black ${digitalTrim !== 0 ? 'text-cyan-400' : 'text-white'}`}>
-                    {digitalTrim > 0 ? '+' : ''}{digitalTrim.toFixed(1)} <span className="text-lg text-slate-500">dB</span>
+              <div className="space-y-6 py-4">
+                <div className="flex items-center justify-between mb-4">
+                  <button onClick={() => setDigitalTrim(prev => parseFloat((prev - 0.1).toFixed(1)))} className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all active:scale-90 text-cyan-400"><Minus size={24} /></button>
+                  <div className="text-center flex-grow">
+                    <div className={`text-6xl font-black ${digitalTrim !== 0 ? 'text-cyan-400' : 'text-white'}`}>
+                      {digitalTrim > 0 ? '+' : ''}{digitalTrim.toFixed(1)} <span className="text-lg text-slate-500">dB</span>
+                    </div>
                   </div>
-                  <p className="text-slate-400 text-[10px] uppercase tracking-widest font-bold mt-2 italic">"Adjust until Peak matches DAW 0.0dB"</p>
+                  <button onClick={() => setDigitalTrim(prev => parseFloat((prev + 0.1).toFixed(1)))} className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all active:scale-90 text-cyan-400"><Plus size={24} /></button>
                 </div>
                 <input 
                   type="range" min="-20" max="20" step="0.1" value={digitalTrim} 
                   onChange={(e) => setDigitalTrim(parseFloat(e.target.value))} 
-                  className="w-full h-2 bg-white/5 rounded-lg appearance-none cursor-pointer accent-cyan-400 border border-white/10"
+                  className="w-full h-3 bg-white/5 rounded-lg appearance-none cursor-pointer accent-cyan-400 border border-white/10"
                 />
                 
-                <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                <div className="flex items-center justify-between pt-6 border-t border-white/5">
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">AES-17 Standard (+3dB RMS)</span>
                   <button 
                     onClick={() => setAes17(!aes17)}
-                    className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase transition-all ${aes17 ? 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.4)]' : 'bg-white/5 text-slate-500 border border-white/10'}`}
+                    className={`px-6 py-3 rounded-xl text-xs font-black uppercase transition-all active:scale-95 ${aes17 ? 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.4)]' : 'bg-white/5 text-slate-500 border border-white/10'}`}
                   >
                     {aes17 ? 'Enabled' : 'Disabled'}
                   </button>
@@ -209,33 +208,43 @@ const App: React.FC = () => {
             </Card>
 
             <Card title="Acoustic Offset" subtitle="Physical Sens Calibration" icon={<Mic2 />}>
-              <div className="space-y-8 py-4 text-center">
-                <div className="text-6xl font-black text-white">{offset} <span className="text-lg text-slate-500">dB</span></div>
+              <div className="space-y-6 py-4">
+                <div className="flex items-center justify-between">
+                  <button onClick={() => setOffset(prev => prev - 1)} className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all active:scale-90 text-purple-400"><Minus size={24} /></button>
+                  <div className="text-center flex-grow">
+                    <div className="text-6xl font-black text-white">{offset} <span className="text-lg text-slate-500">dB</span></div>
+                  </div>
+                  <button onClick={() => setOffset(prev => prev + 1)} className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all active:scale-90 text-purple-400"><Plus size={24} /></button>
+                </div>
                 <input 
                   type="range" min="80" max="130" value={offset} 
                   onChange={(e) => setOffset(parseInt(e.target.value))} 
-                  className="w-full h-2 bg-white/5 rounded-lg appearance-none cursor-pointer accent-purple-500 border border-white/10"
+                  className="w-full h-3 bg-white/5 rounded-lg appearance-none cursor-pointer accent-purple-500 border border-white/10"
                 />
               </div>
             </Card>
 
             <Card title="Distance & Propagation" subtitle="FOH to Source Geometry" className="md:col-span-2">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 py-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-4">
                 <div className="space-y-6">
-                  <div className="flex justify-between items-end">
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Distance</p>
-                    <p className="text-3xl font-black text-white">{distance}m</p>
+                  <div className="flex items-center justify-between">
+                    <button onClick={() => setDistance(prev => Math.max(1, prev - 1))} className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all active:scale-90 text-cyan-400"><Minus size={20} /></button>
+                    <div className="text-center">
+                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Distance</p>
+                      <p className="text-4xl font-black text-white">{distance}m</p>
+                    </div>
+                    <button onClick={() => setDistance(prev => prev + 1)} className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all active:scale-90 text-cyan-400"><Plus size={20} /></button>
                   </div>
-                  <input type="range" min="1" max="100" value={distance} onChange={(e) => setDistance(parseInt(e.target.value))} className="w-full h-2 bg-white/5 rounded-lg appearance-none accent-cyan-500" />
+                  <input type="range" min="1" max="100" value={distance} onChange={(e) => setDistance(parseInt(e.target.value))} className="w-full h-3 bg-white/5 rounded-lg appearance-none accent-cyan-500" />
                 </div>
-                <div className="flex gap-4">
-                  <button onClick={() => setModel('POINT')} className={`flex-1 p-4 rounded-2xl border transition-all ${model === 'POINT' ? 'bg-cyan-500/10 border-cyan-500 text-white' : 'bg-white/5 border-white/5 text-slate-600'}`}>
-                    <p className="font-bold text-xs uppercase">Point Source</p>
-                    <p className="text-[9px] opacity-60">Spherical (-6dB)</p>
+                <div className="grid grid-cols-2 gap-4">
+                  <button onClick={() => setModel('POINT')} className={`p-5 rounded-2xl border transition-all active:scale-95 text-left ${model === 'POINT' ? 'bg-cyan-500/10 border-cyan-500 text-white' : 'bg-white/5 border-white/5 text-slate-600'}`}>
+                    <p className="font-black text-xs uppercase tracking-wider mb-1">Point Source</p>
+                    <p className="text-[9px] opacity-60 font-bold uppercase">Spherical (-6dB)</p>
                   </button>
-                  <button onClick={() => setModel('LINE')} className={`flex-1 p-4 rounded-2xl border transition-all ${model === 'LINE' ? 'bg-purple-500/10 border-purple-500 text-white' : 'bg-white/5 border-white/5 text-slate-600'}`}>
-                    <p className="font-bold text-xs uppercase">Line Array</p>
-                    <p className="text-[9px] opacity-60">Cylindrical (-3dB)</p>
+                  <button onClick={() => setModel('LINE')} className={`p-5 rounded-2xl border transition-all active:scale-95 text-left ${model === 'LINE' ? 'bg-purple-500/10 border-purple-500 text-white' : 'bg-white/5 border-white/5 text-slate-600'}`}>
+                    <p className="font-black text-xs uppercase tracking-wider mb-1">Line Array</p>
+                    <p className="text-[9px] opacity-60 font-bold uppercase">Cylindrical (-3dB)</p>
                   </button>
                 </div>
               </div>
@@ -243,21 +252,19 @@ const App: React.FC = () => {
           </div>
         )}
 
-        {/* Improved UX: Bottom Control Dock */}
-        <div className="fixed bottom-0 left-0 right-0 lg:left-72 z-40 px-6 pb-6 pt-10 pointer-events-none">
-          {/* Subtle gradient to separate from content */}
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent pointer-events-none"></div>
+        <div className="fixed bottom-0 left-0 right-0 lg:left-72 z-40 px-6 pb-8 pt-12 pointer-events-none">
+          <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#050505] via-[#050505]/90 to-transparent pointer-events-none"></div>
           
           <div className="relative max-w-4xl mx-auto flex items-center justify-center pointer-events-auto">
-             <div className={`p-1.5 rounded-[2rem] border border-white/10 transition-all duration-700 glass shadow-2xl ${isActive ? 'shadow-cyan-500/20' : ''}`}>
+             <div className={`p-2 rounded-[2.5rem] border border-white/10 transition-all duration-700 glass shadow-2xl ${isActive ? 'shadow-cyan-500/20' : ''}`}>
                <button 
                 onClick={handleToggle} 
-                className={`flex items-center gap-4 px-10 py-5 rounded-[1.75rem] font-black tracking-[0.2em] uppercase text-black transition-all duration-500 active:scale-95 min-w-[240px] justify-center ${isActive ? 'bg-white text-black' : 'bg-cyan-500 hover:bg-cyan-400 text-black shadow-[0_0_30px_rgba(6,182,212,0.3)]'}`}
+                className={`flex items-center gap-5 px-12 py-6 rounded-[2.2rem] font-black tracking-[0.25em] uppercase text-black transition-all duration-500 active:scale-95 min-w-[280px] justify-center ${isActive ? 'bg-white text-black' : 'bg-cyan-500 hover:bg-cyan-400 text-black shadow-[0_0_30px_rgba(6,182,212,0.3)]'}`}
                >
                  {isActive ? (
-                   <><div className="bg-red-500 w-2 h-2 rounded-full animate-pulse mr-2" /> <Square size={20} fill="currentColor" /> Stop Engine</>
+                   <><div className="bg-red-500 w-2.5 h-2.5 rounded-full animate-pulse mr-1" /> <Square size={24} fill="currentColor" /> Stop Engine</>
                  ) : (
-                   <><Play size={20} fill="currentColor" /> Start Engine</>
+                   <><Play size={24} fill="currentColor" /> Start Engine</>
                  )}
                </button>
              </div>
@@ -269,27 +276,27 @@ const App: React.FC = () => {
 };
 
 const MetricBox: React.FC<{ label: string, value: number, unit: string, icon?: React.ReactNode, color?: string, showReset?: boolean, onReset?: () => void }> = ({ label, value, unit, icon, color = "text-white", showReset, onReset }) => (
-  <div className="bg-white/5 p-4 rounded-2xl border border-white/5 flex flex-col group relative">
-    <div className="flex justify-between items-center mb-2">
+  <div className="bg-white/5 p-5 rounded-2xl border border-white/5 flex flex-col group relative">
+    <div className="flex justify-between items-center mb-3">
       <div className="flex items-center gap-2">
         {icon}
-        <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">{label}</span>
+        <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">{label}</span>
       </div>
       {showReset && (
-        <button onClick={onReset} className="text-slate-600 hover:text-white transition-colors p-1">
-          <RotateCcw size={14}/>
+        <button onClick={onReset} className="text-slate-600 hover:text-white transition-all p-3 bg-white/5 rounded-xl hover:bg-white/10 active:scale-90">
+          <RotateCcw size={18}/>
         </button>
       )}
     </div>
-    <div className={`text-3xl font-black tabular-nums ${color}`}>{value.toFixed(1)} <span className="text-xs text-slate-500 uppercase">{unit}</span></div>
+    <div className={`text-4xl font-black tabular-nums ${color}`}>{value.toFixed(1)} <span className="text-sm text-slate-500 uppercase font-bold">{unit}</span></div>
   </div>
 );
 
 const NavItem: React.FC<{ icon: React.ReactNode, label: string, active?: boolean, onClick: () => void }> = ({ icon, label, active, onClick }) => (
-  <div onClick={onClick} className={`flex items-center gap-4 p-4 rounded-2xl transition-all cursor-pointer group ${active ? 'bg-white/5 text-white' : 'text-slate-500 hover:text-slate-300'}`}>
+  <div onClick={onClick} className={`flex items-center gap-4 p-5 rounded-2xl transition-all cursor-pointer group ${active ? 'bg-white/5 text-white' : 'text-slate-500 hover:text-slate-300'}`}>
     <div className={`${active ? 'text-cyan-400' : ''}`}>{icon}</div>
-    <span className="text-sm font-bold tracking-tight">{label}</span>
-    {active && <div className="ml-auto w-1.5 h-6 bg-cyan-400 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.8)]"></div>}
+    <span className="text-base font-bold tracking-tight">{label}</span>
+    {active && <div className="ml-auto w-2 h-8 bg-cyan-400 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.8)]"></div>}
   </div>
 );
 

@@ -56,26 +56,26 @@ const NumericalMonitor: React.FC<NumericalMonitorProps> = ({ rms, peak, maxRms, 
 
       <div className="flex items-center justify-between mb-10">
         <div className="flex items-center gap-2">
-          <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_8px_rgba(6,182,212,0.8)]"></div>
+          <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_8px_rgba(6,182,212,0.8)]"></div>
           <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Digital IO Metering</span>
         </div>
         {onReset && (
           <button 
             onClick={onReset}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 rounded-lg text-[9px] font-black text-cyan-400 uppercase tracking-widest transition-all shadow-lg"
+            className="flex items-center gap-2 px-5 py-3 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 rounded-xl text-[10px] font-black text-cyan-400 uppercase tracking-widest transition-all shadow-lg active:scale-95"
           >
-            <RotateCcw size={12} /> Refresh Max
+            <RotateCcw size={16} /> Refresh Max
           </button>
         )}
       </div>
       
-      <div className="grid grid-cols-2 gap-12 relative z-10">
+      <div className="grid grid-cols-2 gap-8 md:gap-12 relative z-10">
         {/* RMS Section */}
         <div className="space-y-6">
           <div className="flex flex-col">
             <span className="text-[9px] font-black text-cyan-500 uppercase tracking-[0.2em] mb-1 opacity-60">RMS Session Max</span>
             <span className="text-3xl font-black text-white tabular-nums drop-shadow-[0_0_10px_rgba(255,255,255,0.1)] transition-all">
-              {maxRms <= -89.5 ? '-∞' : maxRms.toFixed(1)} <span className="text-xs text-slate-600">dB</span>
+              {maxRms <= -89.5 ? '-∞' : maxRms.toFixed(1)} <span className="text-xs text-slate-600 font-bold">dB</span>
             </span>
           </div>
 
@@ -91,11 +91,11 @@ const NumericalMonitor: React.FC<NumericalMonitorProps> = ({ rms, peak, maxRms, 
         </div>
 
         {/* Peak Section */}
-        <div className="space-y-6 border-l border-white/5 pl-12">
+        <div className="space-y-6 border-l border-white/5 pl-8 md:pl-12">
           <div className="flex flex-col">
             <span className="text-[9px] font-black text-cyan-500 uppercase tracking-[0.2em] mb-1 opacity-60">Peak Session Max</span>
             <span className={`text-3xl font-black tabular-nums drop-shadow-[0_0_10px_rgba(6,182,212,0.3)] transition-all ${maxPeak > -3 ? 'text-red-500' : 'text-cyan-400'}`}>
-              {maxPeak <= -89.5 ? '-∞' : maxPeak.toFixed(1)} <span className="text-xs opacity-60">dB</span>
+              {maxPeak <= -89.5 ? '-∞' : maxPeak.toFixed(1)} <span className="text-xs opacity-60 font-bold">dB</span>
             </span>
           </div>
 
@@ -112,7 +112,7 @@ const NumericalMonitor: React.FC<NumericalMonitorProps> = ({ rms, peak, maxRms, 
       </div>
 
       {/* Background activity bar */}
-      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-white/5">
+      <div className="absolute bottom-0 left-0 w-full h-[3px] bg-white/5">
         <div 
           className="h-full bg-cyan-500/40 transition-all duration-300 shadow-[0_0_10px_rgba(6,182,212,0.5)]"
           style={{ width: `${Math.min(Math.max((visualPeak + 60) / 60 * 100, 0), 100)}%` }}
